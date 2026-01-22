@@ -6,85 +6,81 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Search, Filter, Users, ArrowRight } from "lucide-react";
+import { useCauses } from "@/hooks/useCauses";
 import causeEducation from "@/assets/cause-education.jpg";
 import causeElderly from "@/assets/cause-elderly.jpg";
 import causeWater from "@/assets/cause-water.jpg";
 
 const categories = ["All", "Education", "Healthcare", "Environment", "Elderly Care", "Clean Water", "Food Security"];
 
-const allCauses = [
+// Static fallback data
+const staticCauses = [
   {
-    id: 1,
+    id: "1",
     title: "Senior Care Initiative",
     description: "Providing companionship and essential services to elderly community members living alone.",
-    image: causeElderly,
-    raised: 45000,
-    goal: 75000,
-    donors: 234,
-    category: "Elderly Care",
+    image_url: causeElderly,
+    raised_amount: 45000,
+    target_amount: 75000,
+    ngo_id: "",
+    is_active: true,
+    start_date: null,
+    end_date: null,
+    created_at: "",
+    ngo: { name: "Care Foundation" },
   },
   {
-    id: 2,
+    id: "2",
     title: "Education for Every Child",
     description: "Supplying educational materials and building schools in underserved communities worldwide.",
-    image: causeEducation,
-    raised: 128500,
-    goal: 150000,
-    donors: 1847,
-    category: "Education",
+    image_url: causeEducation,
+    raised_amount: 128500,
+    target_amount: 150000,
+    ngo_id: "",
+    is_active: true,
+    start_date: null,
+    end_date: null,
+    created_at: "",
+    ngo: { name: "Bright Future Academy" },
   },
   {
-    id: 3,
+    id: "3",
     title: "Clean Water Project",
     description: "Building sustainable water wells and filtration systems in water-scarce regions.",
-    image: causeWater,
-    raised: 89000,
-    goal: 100000,
-    donors: 956,
-    category: "Clean Water",
-  },
-  {
-    id: 4,
-    title: "Healthcare Access Fund",
-    description: "Bringing medical supplies and healthcare professionals to remote communities.",
-    image: causeEducation,
-    raised: 67500,
-    goal: 120000,
-    donors: 512,
-    category: "Healthcare",
-  },
-  {
-    id: 5,
-    title: "Green Earth Restoration",
-    description: "Planting trees and restoring ecosystems in areas affected by deforestation.",
-    image: causeWater,
-    raised: 34000,
-    goal: 80000,
-    donors: 289,
-    category: "Environment",
-  },
-  {
-    id: 6,
-    title: "Community Food Bank",
-    description: "Providing nutritious meals to families facing food insecurity in urban areas.",
-    image: causeElderly,
-    raised: 52000,
-    goal: 60000,
-    donors: 678,
-    category: "Food Security",
+    image_url: causeWater,
+    raised_amount: 89000,
+    target_amount: 100000,
+    ngo_id: "",
+    is_active: true,
+    start_date: null,
+    end_date: null,
+    created_at: "",
+    ngo: { name: "Water for Life" },
   },
 ];
 
 const CausesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  
+  const { data: dbCauses, isLoading } = useCauses();
 
-  const filteredCauses = allCauses.filter((cause) => {
+  // Use database causes if available, otherwise use static data
+  const causes = dbCauses && dbCauses.length > 0 ? dbCauses : staticCauses;
+
+  const filteredCauses = causes.filter((cause) => {
     const matchesSearch = cause.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cause.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || cause.category === selectedCategory;
+      cause.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    // For now, match all categories since we don't have category field in DB
+    const matchesCategory = selectedCategory === "All";
     return matchesSearch && matchesCategory;
   });
+
+  const getImageUrl = (imageUrl: string | null, index: number) => {
+    if (imageUrl) return imageUrl;
+    const images = [causeEducation, causeElderly, causeWater];
+    return images[index % images.length];
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -147,6 +143,13 @@ const CausesPage = () => {
               </Button>
             </div>
 
+            {/* Loading State */}
+            {isLoading && (
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+              </div>
+            )}
+
             {/* Causes Grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredCauses.map((cause, index) => (
@@ -160,13 +163,13 @@ const CausesPage = () => {
                     {/* Image */}
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <img
-                        src={cause.image}
+                        src={getImageUrl(cause.image_url, index)}
                         alt={cause.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute top-4 left-4">
                         <span className="px-3 py-1 rounded-full bg-background/90 backdrop-blur-sm text-xs font-medium text-foreground">
-                          {cause.category}
+                          Cause
                         </span>
                       </div>
                     </div>
@@ -182,13 +185,13 @@ const CausesPage = () => {
 
                       {/* Progress */}
                       <div className="space-y-2">
-                        <Progress value={(cause.raised / cause.goal) * 100} className="h-2" />
+                        <Progress value={(Number(cause.raised_amount) / Number(cause.target_amount)) * 100} className="h-2" />
                         <div className="flex justify-between text-sm">
                           <span className="font-semibold text-foreground">
-                            ${cause.raised.toLocaleString()}
+                            ${Number(cause.raised_amount).toLocaleString()}
                           </span>
                           <span className="text-muted-foreground">
-                            of ${cause.goal.toLocaleString()}
+                            of ${Number(cause.target_amount).toLocaleString()}
                           </span>
                         </div>
                       </div>
@@ -196,8 +199,7 @@ const CausesPage = () => {
                       {/* Footer */}
                       <div className="flex items-center justify-between pt-4 border-t border-border">
                         <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                          <Users className="w-4 h-4" />
-                          <span>{cause.donors} donors</span>
+                          <span>by {cause.ngo?.name || "Partner NGO"}</span>
                         </div>
                         <Button variant="hero" size="sm">
                           Donate
@@ -210,7 +212,7 @@ const CausesPage = () => {
               ))}
             </div>
 
-            {filteredCauses.length === 0 && (
+            {filteredCauses.length === 0 && !isLoading && (
               <div className="text-center py-16">
                 <p className="text-xl text-muted-foreground">No causes found matching your criteria.</p>
                 <Button variant="outline" className="mt-4" onClick={() => {

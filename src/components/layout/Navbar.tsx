@@ -1,11 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -15,6 +17,11 @@ const Navbar = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSignOut = async () => {
+    await signOut();
+    setIsOpen(false);
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass">
@@ -47,11 +54,23 @@ const Navbar = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <Link to="/auth">
-              <Button variant="ghost" size="sm">
-                Sign In
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <span className="text-sm text-muted-foreground">
+                  {user.email}
+                </span>
+                <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Link to="/auth">
+                <Button variant="ghost" size="sm">
+                  Sign In
+                </Button>
+              </Link>
+            )}
             <Link to="/donate">
               <Button variant="hero" size="default">
                 Donate Now
@@ -85,11 +104,18 @@ const Navbar = () => {
                 </Link>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
-                <Link to="/auth" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" className="w-full">
-                    Sign In
+                {user ? (
+                  <Button variant="outline" className="w-full" onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
                   </Button>
-                </Link>
+                ) : (
+                  <Link to="/auth" onClick={() => setIsOpen(false)}>
+                    <Button variant="outline" className="w-full">
+                      Sign In
+                    </Button>
+                  </Link>
+                )}
                 <Link to="/donate" onClick={() => setIsOpen(false)}>
                   <Button variant="hero" className="w-full">
                     Donate Now
