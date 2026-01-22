@@ -14,16 +14,333 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      causes: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          ngo_id: string
+          raised_amount: number | null
+          start_date: string | null
+          target_amount: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          ngo_id: string
+          raised_amount?: number | null
+          start_date?: string | null
+          target_amount?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          ngo_id?: string
+          raised_amount?: number | null
+          start_date?: string | null
+          target_amount?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "causes_ngo_id_fkey"
+            columns: ["ngo_id"]
+            isOneToOne: false
+            referencedRelation: "ngos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      donations: {
+        Row: {
+          amount: number
+          cause_id: string | null
+          created_at: string
+          donor_email: string | null
+          donor_id: string | null
+          donor_name: string | null
+          id: string
+          is_anonymous: boolean | null
+          message: string | null
+          ngo_id: string
+        }
+        Insert: {
+          amount: number
+          cause_id?: string | null
+          created_at?: string
+          donor_email?: string | null
+          donor_id?: string | null
+          donor_name?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          message?: string | null
+          ngo_id: string
+        }
+        Update: {
+          amount?: number
+          cause_id?: string | null
+          created_at?: string
+          donor_email?: string | null
+          donor_id?: string | null
+          donor_name?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          message?: string | null
+          ngo_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "donations_cause_id_fkey"
+            columns: ["cause_id"]
+            isOneToOne: false
+            referencedRelation: "causes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "donations_ngo_id_fkey"
+            columns: ["ngo_id"]
+            isOneToOne: false
+            referencedRelation: "ngos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ngos: {
+        Row: {
+          address: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          email: string | null
+          id: string
+          logo_url: string | null
+          mission: string | null
+          name: string
+          phone: string | null
+          registration_number: string | null
+          status: Database["public"]["Enums"]["ngo_status"]
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string
+          logo_url?: string | null
+          mission?: string | null
+          name: string
+          phone?: string | null
+          registration_number?: string | null
+          status?: Database["public"]["Enums"]["ngo_status"]
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string
+          logo_url?: string | null
+          mission?: string | null
+          name?: string
+          phone?: string | null
+          registration_number?: string | null
+          status?: Database["public"]["Enums"]["ngo_status"]
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      opportunities: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_datetime: string | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          ngo_id: string
+          skills_required: string[] | null
+          slots_available: number | null
+          start_datetime: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_datetime?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          ngo_id: string
+          skills_required?: string[] | null
+          slots_available?: number | null
+          start_datetime?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_datetime?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          ngo_id?: string
+          skills_required?: string[] | null
+          slots_available?: number | null
+          start_datetime?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunities_ngo_id_fkey"
+            columns: ["ngo_id"]
+            isOneToOne: false
+            referencedRelation: "ngos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      volunteer_applications: {
+        Row: {
+          cover_letter: string | null
+          created_at: string
+          id: string
+          ngo_notes: string | null
+          opportunity_id: string
+          status: Database["public"]["Enums"]["application_status"]
+          updated_at: string
+          volunteer_id: string
+        }
+        Insert: {
+          cover_letter?: string | null
+          created_at?: string
+          id?: string
+          ngo_notes?: string | null
+          opportunity_id: string
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+          volunteer_id: string
+        }
+        Update: {
+          cover_letter?: string | null
+          created_at?: string
+          id?: string
+          ngo_notes?: string | null
+          opportunity_id?: string
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+          volunteer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_applications_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_ngo_owner: {
+        Args: { _ngo_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "donor" | "volunteer" | "ngo_admin" | "platform_admin"
+      application_status: "pending" | "accepted" | "rejected"
+      ngo_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +467,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["donor", "volunteer", "ngo_admin", "platform_admin"],
+      application_status: ["pending", "accepted", "rejected"],
+      ngo_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const
