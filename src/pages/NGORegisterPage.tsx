@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -8,12 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Building2, ArrowLeft, Check, Upload, MapPin, Globe, Mail, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { useCreateNGO } from "@/hooks/useNGO";
 
 const NGORegisterPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
+  const createNGO = useCreateNGO();
   const [step, setStep] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     orgName: "",
     registrationNumber: "",
@@ -43,14 +46,41 @@ const NGORegisterPage = () => {
     "Arts & Culture",
   ];
 
+  // Redirect if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to register your NGO",
+        variant: "destructive",
+      });
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate, toast]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    try {
+      await createNGO.mutateAsync({
+        name: formData.orgName,
+        description: formData.description,
+        mission: formData.mission,
+        website: formData.website,
+        email: formData.email,
+        phone: formData.phone,
+        address: `${formData.address}, ${formData.city}, ${formData.country}`,
+        registrationNumber: formData.registrationNumber,
+      });
+      
       setStep(3);
-    }, 2000);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to register NGO",
+        variant: "destructive",
+      });
+    }
   };
 
   const toggleFocusArea = (area: string) => {
@@ -61,6 +91,14 @@ const NGORegisterPage = () => {
         : [...prev.focusAreas, area],
     }));
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -339,8 +377,8 @@ const NGORegisterPage = () => {
                       <Button type="button" variant="outline" onClick={() => setStep(1)}>
                         Back
                       </Button>
-                      <Button type="submit" variant="hero" disabled={isSubmitting}>
-                        {isSubmitting ? "Submitting..." : "Submit Registration"}
+                      <Button type="submit" variant="hero" disabled={createNGO.isPending}>
+                        {createNGO.isPending ? "Submitting..." : "Submit Registration"}
                       </Button>
                     </div>
                   </div>
