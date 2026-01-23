@@ -2,24 +2,24 @@ import { Star } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Sarah Mitchell",
+    name: "Priya Raghavan",
     role: "Monthly Donor",
     content: "KindConnect made it so easy to find causes I truly care about. The transparency in tracking my donations gives me peace of mind that my money is making a real difference.",
-    avatar: "SM",
+    avatar: "PR",
     rating: 5,
   },
   {
-    name: "David Chen",
+    name: "Karthik Nair",
     role: "Volunteer",
     content: "I've been volunteering through KindConnect for 6 months now. The platform connected me with amazing organizations that match my skills and schedule perfectly.",
-    avatar: "DC",
+    avatar: "KN",
     rating: 5,
   },
   {
-    name: "Maria Garcia",
+    name: "Lakshmi Venkatesh",
     role: "NGO Director",
     content: "Since joining KindConnect, our donation intake has increased by 300%. The platform provides incredible tools for managing our campaigns and connecting with donors.",
-    avatar: "MG",
+    avatar: "LV",
     rating: 5,
   },
 ];

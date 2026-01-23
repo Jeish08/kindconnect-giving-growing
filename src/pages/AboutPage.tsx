@@ -29,10 +29,10 @@ const AboutPage = () => {
   ];
 
   const team = [
-    { name: "Sarah Johnson", role: "CEO & Founder", initials: "SJ" },
-    { name: "Michael Chen", role: "CTO", initials: "MC" },
-    { name: "Emily Rodriguez", role: "Head of Partnerships", initials: "ER" },
-    { name: "David Kim", role: "Head of Operations", initials: "DK" },
+    { name: "Ananya Sharma", role: "CEO & Founder", initials: "AS" },
+    { name: "Rajesh Menon", role: "CTO", initials: "RM" },
+    { name: "Deepa Krishnan", role: "Head of Partnerships", initials: "DK" },
+    { name: "Vikram Reddy", role: "Head of Operations", initials: "VR" },
   ];
 
   return (
