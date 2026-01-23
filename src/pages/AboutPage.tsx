@@ -29,7 +29,7 @@ const AboutPage = () => {
   ];
 
   const team = [
-    { name: "Ananya Sharma", role: "CEO & Founder", initials: "AS" },
+    { name: "Jeya Shri S , Kevindraa Ferolin Joseph B", role: "CEO & Founder", initials: "JS" },
     { name: "Rajesh Menon", role: "CTO", initials: "RM" },
     { name: "Deepa Krishnan", role: "Head of Partnerships", initials: "DK" },
     { name: "Vikram Reddy", role: "Head of Operations", initials: "VR" },
