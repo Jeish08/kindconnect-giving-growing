@@ -72,7 +72,7 @@ const AboutPage = () => {
                   destination and every volunteer finds meaningful opportunities.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  Since our founding in 2020, we've facilitated over $12 million in donations 
+                  Since our founding in 2020, we've facilitated over ₹10 crore in donations 
                   and connected more than 50,000 volunteers with causes they care about.
                 </p>
                 <div className="flex gap-4">
@@ -87,7 +87,7 @@ const AboutPage = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { value: "$12M+", label: "Donations Raised" },
+                  { value: "₹10Cr+", label: "Donations Raised" },
                   { value: "500+", label: "Verified NGOs" },
                   { value: "50K+", label: "Active Volunteers" },
                   { value: "45+", label: "Countries Served" },
