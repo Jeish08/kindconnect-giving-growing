@@ -23,8 +23,8 @@ const staticOpportunities = [
   {
     id: "1",
     title: "Community Kitchen Helper",
-    ngo: { name: "Food for All Foundation" },
-    location: "New York, NY",
+    ngo: { name: "Akshaya Patra Foundation" },
+    location: "Chennai, Tamil Nadu",
     start_datetime: null,
     end_datetime: null,
     slots_available: 12,
@@ -37,7 +37,7 @@ const staticOpportunities = [
   {
     id: "2",
     title: "Online Tutoring Mentor",
-    ngo: { name: "Bright Future Academy" },
+    ngo: { name: "Pratham Education Foundation" },
     location: "Remote",
     start_datetime: null,
     end_datetime: null,
@@ -51,8 +51,8 @@ const staticOpportunities = [
   {
     id: "3",
     title: "Environmental Cleanup Leader",
-    ngo: { name: "Green Earth Initiative" },
-    location: "Los Angeles, CA",
+    ngo: { name: "Green Earth Kerala" },
+    location: "Kochi, Kerala",
     start_datetime: null,
     end_datetime: null,
     slots_available: 8,

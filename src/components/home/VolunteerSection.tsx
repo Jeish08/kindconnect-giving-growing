@@ -6,8 +6,8 @@ const opportunities = [
   {
     id: 1,
     title: "Community Kitchen Helper",
-    organization: "Food for All Foundation",
-    location: "New York, NY",
+    organization: "Akshaya Patra Foundation",
+    location: "Chennai, Tamil Nadu",
     time: "Weekends, 9 AM - 1 PM",
     spots: 12,
     type: "In-Person",
@@ -16,7 +16,7 @@ const opportunities = [
   {
     id: 2,
     title: "Online Tutoring Mentor",
-    organization: "Bright Future Academy",
+    organization: "Pratham Education Foundation",
     location: "Remote",
     time: "Flexible Hours",
     spots: 25,
@@ -26,8 +26,8 @@ const opportunities = [
   {
     id: 3,
     title: "Environmental Cleanup Leader",
-    organization: "Green Earth Initiative",
-    location: "Los Angeles, CA",
+    organization: "Green Earth Kerala",
+    location: "Kochi, Kerala",
     time: "Saturdays, 7 AM - 11 AM",
     spots: 8,
     type: "In-Person",
@@ -36,8 +36,8 @@ const opportunities = [
   {
     id: 4,
     title: "Senior Tech Support",
-    organization: "Digital Bridge",
-    location: "Chicago, IL",
+    organization: "Digital Vidya Trust",
+    location: "Bengaluru, Karnataka",
     time: "Tuesdays & Thursdays, 2 PM - 5 PM",
     spots: 15,
     type: "Hybrid",
