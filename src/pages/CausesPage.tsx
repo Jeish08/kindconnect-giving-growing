@@ -188,10 +188,10 @@ const CausesPage = () => {
                         <Progress value={(Number(cause.raised_amount) / Number(cause.target_amount)) * 100} className="h-2" />
                         <div className="flex justify-between text-sm">
                           <span className="font-semibold text-foreground">
-                            ${Number(cause.raised_amount).toLocaleString()}
+                            ₹{Number(cause.raised_amount).toLocaleString()}
                           </span>
                           <span className="text-muted-foreground">
-                            of ${Number(cause.target_amount).toLocaleString()}
+                            of ₹{Number(cause.target_amount).toLocaleString()}
                           </span>
                         </div>
                       </div>

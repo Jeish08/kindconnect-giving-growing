@@ -76,7 +76,7 @@ const DonatePage = () => {
     if (finalAmount < 5) {
       toast({
         title: "Minimum donation",
-        description: "Minimum donation amount is $5",
+        description: "Minimum donation amount is ₹5",
         variant: "destructive",
       });
       return;
@@ -149,7 +149,7 @@ const DonatePage = () => {
                 Thank You for Your Generosity!
               </h1>
               <p className="text-muted-foreground text-lg mb-8">
-                Your donation of ${finalAmount} to {cause.title} has been recorded successfully.
+                Your donation of ₹{finalAmount} to {cause.title} has been recorded successfully.
                 You've made a real difference today.
               </p>
               <div className="flex justify-center gap-4">
@@ -190,10 +190,10 @@ const DonatePage = () => {
                     <div className="flex justify-between">
                       <div>
                         <div className="text-2xl font-bold text-foreground">
-                          ${Number(cause.raised_amount).toLocaleString()}
+                          ₹{Number(cause.raised_amount).toLocaleString()}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          raised of ${Number(cause.target_amount).toLocaleString()}
+                          raised of ₹{Number(cause.target_amount).toLocaleString()}
                         </div>
                       </div>
                     </div>
@@ -272,7 +272,7 @@ const DonatePage = () => {
                               : "border-border bg-background text-foreground hover:border-primary/50"
                           }`}
                         >
-                          ${amount}
+                          ₹{amount}
                         </button>
                       ))}
                     </div>
@@ -282,7 +282,7 @@ const DonatePage = () => {
                       <Label>Custom Amount</Label>
                       <div className="relative">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
-                          $
+                          ₹
                         </span>
                         <Input
                           type="number"
@@ -306,7 +306,7 @@ const DonatePage = () => {
                       disabled={finalAmount < 5}
                     >
                       <Heart className="w-5 h-5" />
-                      Donate ${finalAmount || 0}
+                      Donate ₹{finalAmount || 0}
                       {isMonthly ? "/month" : ""}
                     </Button>
 
@@ -334,7 +334,7 @@ const DonatePage = () => {
                     <div className="bg-muted/50 rounded-xl p-4 flex justify-between items-center">
                       <span className="text-muted-foreground">Donation Amount</span>
                       <span className="text-xl font-bold text-foreground">
-                        ${finalAmount}
+                        ₹{finalAmount}
                         {isMonthly ? "/month" : ""}
                       </span>
                     </div>

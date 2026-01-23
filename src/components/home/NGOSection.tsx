@@ -69,7 +69,7 @@ const NGOSection = () => {
                 {/* Stats Preview */}
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Total Raised", value: "$145,230" },
+                    { label: "Total Raised", value: "₹12,45,230" },
                     { label: "Active Volunteers", value: "234" },
                     { label: "Campaigns", value: "12" },
                     { label: "Donors", value: "1,847" },

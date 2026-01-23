@@ -102,10 +102,10 @@ const FeaturedCausesSection = () => {
                     />
                     <div className="flex justify-between text-sm">
                       <span className="font-semibold text-foreground">
-                        ${cause.raised.toLocaleString()}
+                        ₹{cause.raised.toLocaleString()}
                       </span>
                       <span className="text-muted-foreground">
-                        of ${cause.goal.toLocaleString()}
+                        of ₹{cause.goal.toLocaleString()}
                       </span>
                     </div>
                   </div>

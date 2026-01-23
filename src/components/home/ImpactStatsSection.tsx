@@ -3,7 +3,7 @@ import { Heart, Globe, Users, TrendingUp } from "lucide-react";
 const stats = [
   {
     icon: Heart,
-    value: "$12M+",
+    value: "₹10Cr+",
     label: "Total Donations",
     description: "Raised for causes worldwide",
   },

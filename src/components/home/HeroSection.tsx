@@ -51,7 +51,7 @@ const HeroSection = () => {
             {/* Trust Indicators */}
             <div className="flex items-center gap-8 pt-4">
               <div>
-                <div className="text-3xl font-bold text-foreground">$12M+</div>
+                <div className="text-3xl font-bold text-foreground">₹10Cr+</div>
                 <div className="text-sm text-muted-foreground">Donations Raised</div>
               </div>
               <div className="w-px h-12 bg-border" />

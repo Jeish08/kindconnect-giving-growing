@@ -234,7 +234,7 @@ const AuthPage = () => {
             Connect with verified NGOs, track your impact, and make a real difference in the world.
           </p>
           <div className="flex justify-center gap-4">
-            {["50K+ Volunteers", "500+ NGOs", "$12M+ Raised"].map((stat, i) => (
+            {["50K+ Volunteers", "500+ NGOs", "₹10Cr+ Raised"].map((stat, i) => (
               <div key={i} className="px-4 py-2 rounded-full bg-white/10 text-primary-foreground text-sm">
                 {stat}
               </div>
