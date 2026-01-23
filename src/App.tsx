@@ -11,7 +11,11 @@ import CausesPage from "./pages/CausesPage";
 import VolunteerPage from "./pages/VolunteerPage";
 import NGORegisterPage from "./pages/NGORegisterPage";
 import AboutPage from "./pages/AboutPage";
+import ProfilePage from "./pages/ProfilePage";
+import AdminDashboard from "./pages/AdminDashboard";
+import NGODashboard from "./pages/NGODashboard";
 import NotFound from "./pages/NotFound";
+import ChatWidget from "./components/chat/ChatWidget";
 
 const queryClient = new QueryClient();
 
@@ -33,9 +37,13 @@ const App = () => (
             <Route path="/volunteer/:id" element={<VolunteerPage />} />
             <Route path="/ngo-register" element={<NGORegisterPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/ngo-dashboard" element={<NGODashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <ChatWidget />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
