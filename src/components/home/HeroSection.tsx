@@ -2,10 +2,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
 import heroImage from "@/assets/hero-volunteers.jpg";
-
 const HeroSection = () => {
-  return (
-    <section className="relative min-h-screen flex items-center overflow-hidden gradient-hero pt-20">
+  return <section className="relative min-h-screen flex items-center overflow-hidden gradient-hero pt-20">
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
@@ -23,8 +21,8 @@ const HeroSection = () => {
             
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-foreground">
               Transform Lives,{" "}
-              <span className="text-gradient">One Act of</span>{" "}
-              <span className="text-gradient">Kindness</span> at a Time
+              {" "}
+               at a Time
             </h1>
             
             <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
@@ -70,11 +68,7 @@ const HeroSection = () => {
           {/* Right Content - Hero Image */}
           <div className="relative animate-fade-up delay-200">
             <div className="relative z-10">
-              <img
-                src={heroImage}
-                alt="Volunteers making a difference"
-                className="rounded-3xl shadow-strong object-cover w-full aspect-[4/3]"
-              />
+              <img src={heroImage} alt="Volunteers making a difference" className="rounded-3xl shadow-strong object-cover w-full aspect-[4/3]" />
               
               {/* Floating Cards */}
               <div className="absolute -left-6 top-1/4 glass rounded-2xl p-4 shadow-medium animate-float">
@@ -89,7 +83,9 @@ const HeroSection = () => {
                 </div>
               </div>
               
-              <div className="absolute -right-4 bottom-1/4 glass rounded-2xl p-4 shadow-medium animate-float" style={{ animationDelay: "1s" }}>
+              <div className="absolute -right-4 bottom-1/4 glass rounded-2xl p-4 shadow-medium animate-float" style={{
+              animationDelay: "1s"
+            }}>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center">
                     <span className="text-2xl">🤝</span>
@@ -107,8 +103,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
