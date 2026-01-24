@@ -38,18 +38,11 @@ const DonatePage = () => {
     isAnonymous: false,
   });
 
-  // Use fetched cause or fallback to static data
-  const cause = fetchedCause || {
-    id: id || "1",
-    title: "Education for Every Child",
-    description:
-      "Help us provide educational materials, build schools, and support teachers in underserved communities. Your donation directly impacts children's futures by giving them access to quality education.",
-    image_url: causeEducation,
-    raised_amount: 128500,
-    target_amount: 150000,
-    ngo_id: "",
-    ngo: { name: "Bright Future Academy" },
-  };
+  // Check if we have a valid cause from database
+  const hasValidCause = fetchedCause && fetchedCause.ngo_id;
+  
+  // Use fetched cause or null (will show NGO selection)
+  const cause = fetchedCause || null;
 
   // Set selected NGO when cause loads
   useEffect(() => {
@@ -87,7 +80,9 @@ const DonatePage = () => {
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!selectedNgoId && !fetchedCause?.ngo_id) {
+    const ngoIdToUse = fetchedCause?.ngo_id || selectedNgoId;
+    
+    if (!ngoIdToUse) {
       toast({
         title: "Error",
         description: "Please select an NGO to donate to",
@@ -96,10 +91,26 @@ const DonatePage = () => {
       return;
     }
 
+    // Validate UUID format
+    const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ngoIdToUse);
+    if (!isValidUUID) {
+      toast({
+        title: "Demo Cause",
+        description: "This is a demo cause. Please select a real NGO or cause to donate.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
+      // Only pass causeId if it's a valid UUID
+      const causeIdToUse = fetchedCause?.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(fetchedCause.id) 
+        ? fetchedCause.id 
+        : undefined;
+
       await createDonation.mutateAsync({
-        ngoId: fetchedCause?.ngo_id || selectedNgoId,
-        causeId: fetchedCause?.id,
+        ngoId: ngoIdToUse,
+        causeId: causeIdToUse,
         amount: finalAmount,
         donorName: formData.name,
         donorEmail: formData.email,
@@ -149,7 +160,7 @@ const DonatePage = () => {
                 Thank You for Your Generosity!
               </h1>
               <p className="text-muted-foreground text-lg mb-8">
-                Your donation of ₹{finalAmount} to {cause.title} has been recorded successfully.
+                Your donation of ₹{finalAmount} {cause ? `to ${cause.title}` : ''} has been recorded successfully.
                 You've made a real difference today.
               </p>
               <div className="flex justify-center gap-4">
@@ -163,54 +174,78 @@ const DonatePage = () => {
             </div>
           ) : (
             <div className="grid lg:grid-cols-2 gap-12">
-              {/* Left - Cause Info */}
+              {/* Left - Cause Info or General Donation */}
               <div className="space-y-6">
-                <div className="rounded-3xl overflow-hidden shadow-medium">
-                  <img
-                    src={cause.image_url || causeEducation}
-                    alt={cause.title}
-                    className="w-full aspect-video object-cover"
-                  />
-                </div>
+                {cause ? (
+                  <>
+                    <div className="rounded-3xl overflow-hidden shadow-medium">
+                      <img
+                        src={cause.image_url || causeEducation}
+                        alt={cause.title}
+                        className="w-full aspect-video object-cover"
+                      />
+                    </div>
 
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span className="px-3 py-1 rounded-full bg-primary/10 text-primary">
-                      Cause
-                    </span>
-                    <span>by {cause.ngo?.name || "KindConnect Partner"}</span>
-                  </div>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span className="px-3 py-1 rounded-full bg-primary/10 text-primary">
+                          Cause
+                        </span>
+                        <span>by {cause.ngo?.name || "KindConnect Partner"}</span>
+                      </div>
 
-                  <h1 className="text-3xl font-bold text-foreground">{cause.title}</h1>
-                  <p className="text-muted-foreground leading-relaxed">{cause.description}</p>
+                      <h1 className="text-3xl font-bold text-foreground">{cause.title}</h1>
+                      <p className="text-muted-foreground leading-relaxed">{cause.description}</p>
 
-                  {/* Progress */}
-                  <div className="bg-card rounded-2xl p-6 border border-border/50 space-y-4">
-                    <Progress value={(Number(cause.raised_amount) / Number(cause.target_amount)) * 100} className="h-3" />
-                    <div className="flex justify-between">
-                      <div>
-                        <div className="text-2xl font-bold text-foreground">
-                          ₹{Number(cause.raised_amount).toLocaleString()}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          raised of ₹{Number(cause.target_amount).toLocaleString()}
+                      {/* Progress */}
+                      <div className="bg-card rounded-2xl p-6 border border-border/50 space-y-4">
+                        <Progress value={(Number(cause.raised_amount) / Number(cause.target_amount)) * 100} className="h-3" />
+                        <div className="flex justify-between">
+                          <div>
+                            <div className="text-2xl font-bold text-foreground">
+                              ₹{Number(cause.raised_amount).toLocaleString()}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              raised of ₹{Number(cause.target_amount).toLocaleString()}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  {/* Share */}
-                  <div className="flex items-center gap-4">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Share2 className="w-4 h-4" />
-                      Share
-                    </Button>
-                    <Button variant="ghost" size="sm" className="gap-2">
-                      <Heart className="w-4 h-4" />
-                      Save
-                    </Button>
-                  </div>
-                </div>
+                      {/* Share */}
+                      <div className="flex items-center gap-4">
+                        <Button variant="outline" size="sm" className="gap-2">
+                          <Share2 className="w-4 h-4" />
+                          Share
+                        </Button>
+                        <Button variant="ghost" size="sm" className="gap-2">
+                          <Heart className="w-4 h-4" />
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="rounded-3xl overflow-hidden shadow-medium bg-gradient-to-br from-primary/20 to-coral/20 flex items-center justify-center aspect-video">
+                      <Heart className="w-24 h-24 text-primary opacity-50" />
+                    </div>
+
+                    <div className="space-y-4">
+                      <h1 className="text-3xl font-bold text-foreground">Make a Difference Today</h1>
+                      <p className="text-muted-foreground leading-relaxed">
+                        Choose an organization to support and help create positive change in communities across India. 
+                        Your donation goes directly to verified NGOs working on causes you care about.
+                      </p>
+                      
+                      <div className="bg-card rounded-2xl p-6 border border-border/50">
+                        <p className="text-sm text-muted-foreground">
+                          💡 <strong>Tip:</strong> Browse our <Link to="/causes" className="text-primary hover:underline">causes page</Link> to find specific campaigns you'd like to support.
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Right - Donation Form */}
@@ -220,20 +255,31 @@ const DonatePage = () => {
                     <h2 className="text-2xl font-bold text-foreground">Make a Donation</h2>
 
                     {/* Select NGO if no cause selected */}
-                    {!fetchedCause && ngos && ngos.length > 0 && (
+                    {!hasValidCause && (
                       <div className="space-y-2">
-                        <Label>Select Organization</Label>
-                        <select
-                          value={selectedNgoId}
-                          onChange={(e) => setSelectedNgoId(e.target.value)}
-                          className="w-full h-12 px-4 rounded-xl border border-border bg-background text-foreground"
-                        >
-                          {ngos.map((ngo) => (
-                            <option key={ngo.id} value={ngo.id}>
-                              {ngo.name}
-                            </option>
-                          ))}
-                        </select>
+                        <Label>Select Organization *</Label>
+                        {ngos && ngos.length > 0 ? (
+                          <select
+                            value={selectedNgoId}
+                            onChange={(e) => setSelectedNgoId(e.target.value)}
+                            className="w-full h-12 px-4 rounded-xl border border-border bg-background text-foreground"
+                            required
+                          >
+                            <option value="">Choose an NGO...</option>
+                            {ngos.map((ngo) => (
+                              <option key={ngo.id} value={ngo.id}>
+                                {ngo.name}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <div className="p-4 bg-muted rounded-xl text-center">
+                            <p className="text-muted-foreground text-sm">No NGOs available yet.</p>
+                            <Link to="/ngo-register" className="text-primary text-sm hover:underline">
+                              Register your NGO
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     )}
 

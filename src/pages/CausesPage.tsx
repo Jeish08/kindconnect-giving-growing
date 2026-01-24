@@ -5,57 +5,100 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Search, Filter, Users, ArrowRight } from "lucide-react";
-import { useCauses } from "@/hooks/useCauses";
+import { Search, Filter, ArrowRight } from "lucide-react";
+import { useCauses, Cause } from "@/hooks/useCauses";
 import causeEducation from "@/assets/cause-education.jpg";
 import causeElderly from "@/assets/cause-elderly.jpg";
 import causeWater from "@/assets/cause-water.jpg";
 
-const categories = ["All", "Education", "Healthcare", "Environment", "Elderly Care", "Clean Water", "Food Security"];
+const categories = ["All", "Education", "Healthcare", "Elderly Care", "Clean Water", "Food Security", "Environment"];
 
-// Static fallback data
-const staticCauses = [
+// Category to image mapping
+const categoryImages: Record<string, string> = {
+  "Education": causeEducation,
+  "Elderly Care": causeElderly,
+  "Clean Water": causeWater,
+  "Healthcare": causeEducation,
+  "Food Security": causeElderly,
+  "Environment": causeWater,
+};
+
+// Static fallback data with categories
+const staticCauses: (Cause & { category?: string })[] = [
   {
-    id: "1",
+    id: "static-1",
     title: "Senior Care Initiative",
     description: "Providing companionship and essential services to elderly community members living alone.",
     image_url: causeElderly,
     raised_amount: 45000,
     target_amount: 75000,
-    ngo_id: "",
+    ngo_id: "static-ngo-1",
     is_active: true,
     start_date: null,
     end_date: null,
     created_at: "",
     ngo: { name: "Care Foundation" },
+    category: "Elderly Care",
   },
   {
-    id: "2",
+    id: "static-2",
     title: "Education for Every Child",
     description: "Supplying educational materials and building schools in underserved communities worldwide.",
     image_url: causeEducation,
     raised_amount: 128500,
     target_amount: 150000,
-    ngo_id: "",
+    ngo_id: "static-ngo-2",
     is_active: true,
     start_date: null,
     end_date: null,
     created_at: "",
     ngo: { name: "Bright Future Academy" },
+    category: "Education",
   },
   {
-    id: "3",
+    id: "static-3",
     title: "Clean Water Project",
     description: "Building sustainable water wells and filtration systems in water-scarce regions.",
     image_url: causeWater,
     raised_amount: 89000,
     target_amount: 100000,
-    ngo_id: "",
+    ngo_id: "static-ngo-3",
     is_active: true,
     start_date: null,
     end_date: null,
     created_at: "",
     ngo: { name: "Water for Life" },
+    category: "Clean Water",
+  },
+  {
+    id: "static-4",
+    title: "Community Health Clinic",
+    description: "Providing free healthcare services and medicines to underprivileged families.",
+    image_url: causeEducation,
+    raised_amount: 67000,
+    target_amount: 120000,
+    ngo_id: "static-ngo-4",
+    is_active: true,
+    start_date: null,
+    end_date: null,
+    created_at: "",
+    ngo: { name: "Health First Foundation" },
+    category: "Healthcare",
+  },
+  {
+    id: "static-5",
+    title: "Zero Hunger Campaign",
+    description: "Distributing nutritious meals to homeless and hungry families every day.",
+    image_url: causeElderly,
+    raised_amount: 95000,
+    target_amount: 200000,
+    ngo_id: "static-ngo-5",
+    is_active: true,
+    start_date: null,
+    end_date: null,
+    created_at: "",
+    ngo: { name: "Food For All" },
+    category: "Food Security",
   },
 ];
 
@@ -66,20 +109,45 @@ const CausesPage = () => {
   const { data: dbCauses, isLoading } = useCauses();
 
   // Use database causes if available, otherwise use static data
-  const causes = dbCauses && dbCauses.length > 0 ? dbCauses : staticCauses;
+  const allCauses = dbCauses && dbCauses.length > 0 ? dbCauses : staticCauses;
 
-  const filteredCauses = causes.filter((cause) => {
+  // Filter by search and category
+  const filteredCauses = allCauses.filter((cause: any) => {
     const matchesSearch = cause.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cause.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    // For now, match all categories since we don't have category field in DB
-    const matchesCategory = selectedCategory === "All";
+    
+    // Match category - check if cause has category field or infer from title
+    let causeCategory = cause.category || "Education";
+    if (!cause.category) {
+      // Infer category from title for static data
+      const title = cause.title.toLowerCase();
+      if (title.includes("senior") || title.includes("elderly")) causeCategory = "Elderly Care";
+      else if (title.includes("water")) causeCategory = "Clean Water";
+      else if (title.includes("health") || title.includes("clinic")) causeCategory = "Healthcare";
+      else if (title.includes("food") || title.includes("hunger")) causeCategory = "Food Security";
+      else if (title.includes("environment") || title.includes("green")) causeCategory = "Environment";
+      else causeCategory = "Education";
+    }
+    
+    const matchesCategory = selectedCategory === "All" || causeCategory === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const getImageUrl = (imageUrl: string | null, index: number) => {
-    if (imageUrl) return imageUrl;
-    const images = [causeEducation, causeElderly, causeWater];
-    return images[index % images.length];
+  const getImageUrl = (cause: any, index: number) => {
+    if (cause.image_url && !cause.image_url.startsWith('static')) return cause.image_url;
+    const category = cause.category || "Education";
+    return categoryImages[category] || [causeEducation, causeElderly, causeWater][index % 3];
+  };
+
+  const getCauseCategory = (cause: any) => {
+    if (cause.category) return cause.category;
+    const title = cause.title.toLowerCase();
+    if (title.includes("senior") || title.includes("elderly")) return "Elderly Care";
+    if (title.includes("water")) return "Clean Water";
+    if (title.includes("health") || title.includes("clinic")) return "Healthcare";
+    if (title.includes("food") || title.includes("hunger")) return "Food Security";
+    if (title.includes("environment") || title.includes("green")) return "Environment";
+    return "Education";
   };
 
   return (
@@ -163,13 +231,13 @@ const CausesPage = () => {
                     {/* Image */}
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <img
-                        src={getImageUrl(cause.image_url, index)}
+                        src={getImageUrl(cause, index)}
                         alt={cause.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute top-4 left-4">
                         <span className="px-3 py-1 rounded-full bg-background/90 backdrop-blur-sm text-xs font-medium text-foreground">
-                          Cause
+                          {getCauseCategory(cause)}
                         </span>
                       </div>
                     </div>

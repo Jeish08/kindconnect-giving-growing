@@ -32,7 +32,7 @@ const HeroSection = () => {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <Link to="/donate">
+              <Link to="/causes">
                 <Button variant="hero" size="lg">
                   Start Donating
                   <ArrowRight className="w-5 h-5" />

@@ -13,6 +13,7 @@ export interface Cause {
   end_date: string | null;
   is_active: boolean;
   created_at: string;
+  category?: string;
   ngo?: {
     name: string;
   };
