@@ -28,7 +28,7 @@ const CTASection = () => {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <Link to="/donate">
+            <Link to="/causes">
               <Button
                 size="xl"
                 className="bg-white text-primary hover:bg-white/90 shadow-strong"

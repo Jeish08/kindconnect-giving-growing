@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -10,17 +10,26 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
+const INITIAL_MESSAGE: Message = {
+  role: "assistant",
+  content: "Hi! I'm KindConnect AI 👋 I can help you find causes to donate to, volunteer opportunities that match your interests, or answer any questions about our platform. How can I help you today?",
+};
+
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content: "Hi! I'm KindConnect AI 👋 I can help you find causes to donate to, volunteer opportunities that match your interests, or answer any questions about our platform. How can I help you today?",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleReset = () => {
+    setMessages([INITIAL_MESSAGE]);
+    setInput("");
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -156,13 +165,31 @@ const ChatWidget = () => {
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-120px)] bg-background border border-border rounded-2xl shadow-xl flex flex-col overflow-hidden animate-fade-up">
           {/* Header */}
-          <div className="gradient-primary p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-primary-foreground" />
+          <div className="gradient-primary p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-primary-foreground">KindConnect AI</h3>
+                <p className="text-xs text-primary-foreground/80">Your donation & volunteer assistant</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-primary-foreground">KindConnect AI</h3>
-              <p className="text-xs text-primary-foreground/80">Your donation & volunteer assistant</p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleReset}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+                title="Reset conversation"
+              >
+                <RotateCcw className="w-4 h-4 text-primary-foreground" />
+              </button>
+              <button
+                onClick={handleClose}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+                title="Close chat"
+              >
+                <X className="w-4 h-4 text-primary-foreground" />
+              </button>
             </div>
           </div>
 

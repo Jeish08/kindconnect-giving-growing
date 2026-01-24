@@ -61,7 +61,12 @@ const AuthPage = () => {
             title: "Account created!",
             description: "Your account has been created successfully.",
           });
-          navigate("/");
+          // If user selected NGO, redirect to NGO registration page
+          if (formData.userType === "ngo") {
+            navigate("/ngo-register");
+          } else {
+            navigate("/");
+          }
         }
       }
     } catch (error) {

@@ -113,11 +113,33 @@ const VolunteerPage = () => {
       });
       return;
     }
+    // Check if it's a static/demo opportunity (non-UUID id)
+    const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(opportunityId);
+    if (!isValidUUID) {
+      toast({
+        title: "Demo Opportunity",
+        description: "This is a demo opportunity. Real opportunities will be available once NGOs add them.",
+        variant: "default",
+      });
+      return;
+    }
     setApplyDialog({ open: true, opportunityId, title });
   };
 
   const submitApplication = async () => {
     if (!user) return;
+
+    // Validate UUID format before submitting
+    const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(applyDialog.opportunityId);
+    if (!isValidUUID) {
+      toast({
+        title: "Invalid Opportunity",
+        description: "This opportunity is not available for applications.",
+        variant: "destructive",
+      });
+      setApplyDialog({ open: false, opportunityId: "", title: "" });
+      return;
+    }
 
     try {
       await applyMutation.mutateAsync({
